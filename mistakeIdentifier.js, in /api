@@ -1,0 +1,18 @@
+const typos = require('typos'); // Hypothetical typo detection library
+const fs = require('fs');
+
+function analyzeMistakes(text, errors) {
+    const typoAnalysis = typos.check(text);
+    const mistakeProfile = {
+        typos: typoAnalysis.errors,
+        error_rate: errors.length / text.length,
+        common_mistakes: errors.reduce((acc, err) => {
+            acc[err.type] = (acc[err.type] || 0) + 1;
+            return acc;
+        }, {})
+    };
+    fs.writeFileSync('mistake_profile.json', JSON.stringify(mistakeProfile));
+    return mistakeProfile;
+}
+
+module.exports = { analyzeMistakes };
